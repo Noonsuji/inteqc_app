@@ -32,6 +32,8 @@ class _MainHomeState extends State<MainHome> {
     BodyProfile(),
   ];
   AppController appController = Get.put(AppController());
+  final hideAppBarFor = [1, 2, 3];
+
   List<BottomNavigationBarItem> items = [];
   @override
   void initState() {
@@ -42,7 +44,6 @@ class _MainHomeState extends State<MainHome> {
           icon: Icon(
             iconDatas[i],
             size: i == 2 ? 50 : 27, // ปุ่ม Menu ใหญ่ขึ้น
-         
           ),
           label: titles[i],
         ),
@@ -53,24 +54,102 @@ class _MainHomeState extends State<MainHome> {
   @override
   Widget build(BuildContext context) {
     return Obx(
-      () => Scaffold(
-        appBar: AppBar(title: Text(titles[appController.indexBody.value])),
-        body: bodys[appController.indexBody.value],
-        bottomNavigationBar: BottomNavigationBar(
-          items: items,
-          currentIndex: appController.indexBody.value,
-          selectedItemColor: AppConstant.appColor,
-          selectedIconTheme: IconThemeData(size: 50),
-          unselectedIconTheme: IconThemeData(size: 27), // 👈 ขนาดไอคอนอื่น
-          selectedLabelStyle: TextStyle(
-            fontSize: 14,
-            fontWeight: FontWeight.bold,
+      () => SafeArea(
+        child: Scaffold(
+          appBar: [1, 2, 3].contains(appController.indexBody.value)
+              ? null
+              : PreferredSize(
+                  preferredSize: const Size.fromHeight(75),
+                  child: AppBar(
+                    backgroundColor: Colors.white,
+                    elevation: 12,
+                    title: Row(
+                      mainAxisAlignment:
+                          MainAxisAlignment.center, // จัด Row ให้อยู่กลางแนวนอน
+                      mainAxisSize: MainAxisSize.min, // ขนาดเท่าที่จำเป็น
+                      children: [
+                        CircleAvatar(
+                          radius: 25,
+                          backgroundImage: AssetImage(
+                            'images/iconhuman.png', // ใส่ URL หรือ AssetImage
+                          ),
+                        ),
+                        const SizedBox(width: 12),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              'INEQC MEMBER',
+                              style: AppConstant.headStyle(
+                                fontSize: 16,
+                                
+                              ),
+                            ),
+                            Text(
+                              'Suchada Aumkong',
+                              style: AppConstant.LoginStyle(
+                                fontSize: 14,
+                                
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                    actions: [
+                      Padding(
+                        padding: const EdgeInsets.only(right: 16),
+                        child: Stack(
+                          alignment: Alignment.topRight,
+                          children: [
+                            const Icon(
+                              Icons.notifications_none,
+                              color: Colors.black,
+                              size: 32, // เพิ่มขนาดไอคอนแจ้งเตือน
+                            ),
+                            Positioned(
+                              right: 0,
+                              top: 0,
+                              child: Container(
+                                padding: const EdgeInsets.all(3),
+                                decoration: BoxDecoration(
+                                  color: Colors.red,
+                                  shape: BoxShape.circle,
+                                ),
+                                child: const Text(
+                                  '3',
+                                  style: TextStyle(
+                                    fontSize: 10,
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+
+          body: bodys[appController.indexBody.value],
+          bottomNavigationBar: BottomNavigationBar(
+            items: items,
+            currentIndex: appController.indexBody.value,
+            selectedItemColor: AppConstant.appColor,
+            selectedIconTheme: IconThemeData(size: 50),
+            unselectedIconTheme: IconThemeData(size: 27),
+            selectedLabelStyle: TextStyle(
+              fontSize: 14,
+              fontWeight: FontWeight.bold,
+            ),
+            unselectedLabelStyle: TextStyle(fontSize: 12),
+            unselectedItemColor: Colors.grey,
+            onTap: (value) {
+              appController.indexBody.value = value;
+            },
           ),
-          unselectedLabelStyle: TextStyle(fontSize: 12),
-          unselectedItemColor: Colors.grey,
-          onTap: (value) {
-            appController.indexBody.value = value;
-          },
         ),
       ),
     );

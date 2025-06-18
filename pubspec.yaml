@@ -43,6 +43,7 @@ dependencies:
   get_storage: ^2.1.1
   responsive_builder: ^0.7.1
   material3_layout: ^0.0.7
+  carousel_slider: ^5.1.1
 
 
 
@@ -98,10 +99,10 @@ flutter:
   # list giving the asset and other descriptors for the font. For
   # example:
   fonts:
-    - family: Sarabun
+    - family: Kanit
       fonts:
-        - asset: fonts/Sarabun-Regular.ttf
-        - asset: fonts/Sarabun-Bold.ttf
+        - asset: fonts/Kanit-Regular.ttf
+        - asset: fonts/Kanit-Bold.ttf
   #         style: italic
   #   - family: Trajan Pro
   #     fonts:
