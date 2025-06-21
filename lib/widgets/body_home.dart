@@ -1,8 +1,13 @@
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:inteqc_app/utility/app_constant.dart';
 import 'package:inteqc_app/utility/app_controller.dart';
+import 'package:inteqc_app/widgets/body_vcard.dart';
+import 'package:inteqc_app/widgets/body_webviewpage.dart';
+
+import 'package:url_launcher/url_launcher.dart';
 
 class BodyHome extends StatefulWidget {
   const BodyHome({super.key});
@@ -13,16 +18,39 @@ class BodyHome extends StatefulWidget {
 
 class _BodyHomeState extends State<BodyHome> {
   AppController appController = Get.put(AppController());
+
+  Future<void> _launchEmailApp() async {
+    const String outlookAndroidScheme = 'ms-outlook://'; // บางเครื่องรองรับ
+    const String outlookAndroidPackage = 'com.microsoft.office.outlook';
+
+    // ใช้ launchUrl ถ้า scheme ทำงาน
+    if (await canLaunchUrl(Uri.parse(outlookAndroidScheme))) {
+      await launchUrl(Uri.parse(outlookAndroidScheme));
+    } else {
+      // fallback เปิดแอปด้วย package (Android เท่านั้น)
+      final Uri uri = Uri(
+        scheme: 'intent',
+        path: '/',
+        queryParameters: {'package': outlookAndroidPackage},
+      );
+
+      if (await canLaunchUrl(uri)) {
+        await launchUrl(uri);
+      } else {
+        debugPrint('ไม่พบแอป Outlook บนเครื่องนี้');
+      }
+    }
+  }
+
   final List<Map<String, String>> menuItems = [
-    {'icon': 'images/iconcode.png', 'label': 'แจ้งซ่อม'},
-    {'icon': 'images/iconseminar.png', 'label': 'จองห้องประชุม'},
-    {'icon': 'images/iconleave.png', 'label': 'ลา'},
-    {'icon': 'images/iconworklist.png', 'label': 'WorkJob'},
-    {'icon': 'images/iconbadfeedback.png', 'label': 'Complain'},
+    {'icon': 'images/help-desk.png', 'label': 'แจ้งซ่อม'},
+    {'icon': 'images/meeting-room.png', 'label': 'จองห้องประชุม'},
+    {'icon': 'images/ess.png', 'label': 'ess'},
+    {'icon': 'images/driving-license.png', 'label': 'Vcard'},
+    {'icon': 'images/google-forms.png', 'label': 'E-Form'},
+    {'icon': 'images/bad-feedback.png', 'label': 'ร้องเรียน'},
     {'icon': 'images/icommailapplication.png', 'label': 'Email'},
-    {'icon': 'images/iconcontactform.png', 'label': 'E-Form'},
     {'icon': 'images/iconstore.png', 'label': 'Shop'},
-    {'icon': 'images/iconcard.png', 'label': 'Vcard'},
   ];
   List<Widget> buildMenuPages() {
     const itemsPerPage = 6;
@@ -123,15 +151,15 @@ class _BodyHomeState extends State<BodyHome> {
                 ),
                 TextButton(
                   onPressed: () {
-                    appController.indexBody.value = 1; 
+                    appController.indexBody.value = 1;
                   },
                   child: Text(
-                  'แสดงทั้งหมด>>',
-                  style: AppConstant.TxtStyle(
-                    fontSize: 18,
-                    color: const Color.fromARGB(255, 0, 98, 255),
+                    'แสดงทั้งหมด>>',
+                    style: AppConstant.TxtStyle(
+                      fontSize: 18,
+                      color: const Color.fromARGB(255, 0, 98, 255),
+                    ),
                   ),
-                ),
                 ),
               ],
             ),
@@ -163,21 +191,53 @@ class _BodyHomeState extends State<BodyHome> {
     );
   }
 
-  _buildMenuItemWithImage(String imagePath, String label) {
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        Image.asset(imagePath, width: 48, height: 48),
-        const SizedBox(height: 8),
-        Text(
-          label,
-          style: AppConstant.TxtStyle(
-            fontSize: 14,
-            color: const Color.fromARGB(255, 52, 52, 52),
+  Widget _buildMenuItemWithImage(String imagePath, String label) {
+    return InkWell(
+      onTap: () {
+        switch (label) {
+          case 'แจ้งซ่อม':
+            // Navigator.push(context, MaterialPageRoute(builder: (_) => BodyRepair()));
+            break;
+          case 'จองห้องประชุม':
+            // Navigator.push(context, MaterialPageRoute(builder: (_) => BodyMeeting()));
+            break;
+          case 'Email':
+            _launchEmailApp();
+            break;
+          case 'ess':
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) =>
+                    BodyWebviewpage(url: 'https://flutter.dev/'),
+              ),
+            );
+            break;
+            case 'Vcard':
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (_) => const BodyVcard()),
+            );
+            break;
+          default:
+            debugPrint('ยังไม่ได้กำหนดหน้าสำหรับ: $label');
+        }
+      },
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Image.asset(imagePath, width: 48, height: 48),
+          const SizedBox(height: 8),
+          Text(
+            label,
+            style: AppConstant.TxtStyle(
+              fontSize: 14,
+              color: const Color.fromARGB(255, 52, 52, 52),
+            ),
+            textAlign: TextAlign.center,
           ),
-          textAlign: TextAlign.center,
-        ),
-      ],
+        ],
+      ),
     );
   }
 }

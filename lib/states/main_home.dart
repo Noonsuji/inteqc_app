@@ -56,7 +56,7 @@ class _MainHomeState extends State<MainHome> {
     return Obx(
       () => SafeArea(
         child: Scaffold(
-          appBar: [1, 2, 3].contains(appController.indexBody.value)
+          appBar: [1, 2, 3,4].contains(appController.indexBody.value)
               ? null
               : PreferredSize(
                   preferredSize: const Size.fromHeight(75),
@@ -68,10 +68,14 @@ class _MainHomeState extends State<MainHome> {
                           MainAxisAlignment.center, // จัด Row ให้อยู่กลางแนวนอน
                       mainAxisSize: MainAxisSize.min, // ขนาดเท่าที่จำเป็น
                       children: [
-                        CircleAvatar(
-                          radius: 25,
-                          backgroundImage: AssetImage(
-                            'images/iconhuman.png', // ใส่ URL หรือ AssetImage
+                        GestureDetector(onTap: () {
+                          appController.indexBody.value = 4; // เปลี่ยนไปหน้า Profile
+                        },
+                          child: CircleAvatar(
+                            radius: 25,
+                            backgroundImage: AssetImage(
+                              'images/iconhuman.png', // ใส่ URL หรือ AssetImage
+                            ),
                           ),
                         ),
                         const SizedBox(width: 12),
@@ -79,7 +83,7 @@ class _MainHomeState extends State<MainHome> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              'INEQC MEMBER',
+                              'INTEQC MEMBER',
                               style: AppConstant.headStyle(
                                 fontSize: 16,
                                 

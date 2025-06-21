@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:inteqc_app/utility/app_constant.dart';
 
 class BodyNews extends StatefulWidget {
   const BodyNews({super.key});
@@ -31,23 +32,35 @@ class _BodyNewsState extends State<BodyNews>
   Widget build(BuildContext context) {
     return DefaultTabController(
       length: 3,
-      child: Scaffold(
-        appBar: AppBar(
-          title: const Text('ข่าวสารทั้งหมด'),
-          bottom: const TabBar(
-            tabs: [
-              Tab(text: 'ประกาศใหม่'),
-              Tab(text: 'ประกาศทั่วไป'),
-              Tab(text: 'จาก HR'),
+      child: GestureDetector(
+        onTap: () => FocusScope.of(context).unfocus(),
+        child: Scaffold(
+          appBar: AppBar(
+            title: Text('ข่าวสารทั้งหมด'),
+            titleTextStyle: AppConstant.headStyle(),
+            bottom: TabBar(
+              labelStyle: AppConstant.TxtStyle(
+                fontSize: 14,
+                color: const Color(0xFFA21D21),
+              ), // ใช้ Kanit
+              // labelColor: Colors.white,
+              unselectedLabelColor: const Color.fromARGB(255, 83, 83, 83),
+
+              //indicatorColor: Colors.white,
+              tabs: [
+                Tab(text: 'ประกาศใหม่'),
+                Tab(text: 'ประกาศทั่วไป'),
+                Tab(text: 'จาก HR'),
+              ],
+            ),
+          ),
+          body: TabBarView(
+            children: [
+              _buildNewsTab('new'),
+              _buildNewsTab('general'),
+              _buildNewsTab('hr'),
             ],
           ),
-        ),
-        body: TabBarView(
-          children: [
-            _buildNewsTab('new'),
-            _buildNewsTab('general'),
-            _buildNewsTab('hr'),
-          ],
         ),
       ),
     );
@@ -68,7 +81,10 @@ class _BodyNewsState extends State<BodyNews>
           padding: const EdgeInsets.all(12),
           child: TextField(
             decoration: InputDecoration(
+              labelText: 'ค้นหา',
+              labelStyle: AppConstant.bodyStyle(),
               hintText: 'ค้นหาในหมวด ${categoryTitles[categoryKey]}...',
+              hintStyle: AppConstant.bodyStyle(),
               prefixIcon: const Icon(Icons.search),
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(12),
@@ -82,7 +98,6 @@ class _BodyNewsState extends State<BodyNews>
           ),
         ),
 
-        // ✅ Grid
         Expanded(
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 12),
@@ -96,7 +111,7 @@ class _BodyNewsState extends State<BodyNews>
               ),
               itemBuilder: (context, index) {
                 final imgPath = filtered[index];
-                return Card(
+                return Card(color: const Color.fromARGB(255, 255, 255, 255),
                   elevation: 2,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(12),
@@ -121,7 +136,12 @@ class _BodyNewsState extends State<BodyNews>
                           children: [
                             Text(
                               'หัวข้อข่าว',
-                              style: TextStyle(fontWeight: FontWeight.bold),
+                              style: TextStyle(
+                                color: Color.fromARGB(255, 0, 0, 0),
+                                fontSize: 16,
+                                fontFamily: 'kanit',
+                                fontWeight: FontWeight.bold,
+                              ),
                               maxLines: 2,
                               overflow: TextOverflow.ellipsis,
                             ),
@@ -129,20 +149,22 @@ class _BodyNewsState extends State<BodyNews>
                             Text(
                               'เนื้อหาย่อ...',
                               style: TextStyle(
-                                color: Colors.grey,
-                                fontSize: 12,
+                                color: Color.fromARGB(255, 0, 0, 0),
+                                fontSize: 14,
+                                fontFamily: 'kanit',
                               ),
                               maxLines: 2,
                               overflow: TextOverflow.ellipsis,
                             ),
-                            SizedBox(height: 4),
+                            SizedBox(height: 6),
                             Align(
                               alignment: Alignment.centerRight,
                               child: Text(
                                 'อ่านเพิ่มเติม',
                                 style: TextStyle(
-                                  color: Colors.red,
-                                  fontSize: 12,
+                                  color: Color.fromARGB(255, 91, 155, 250),
+                                  fontSize: 14,
+                                  fontFamily: 'kanit',
                                 ),
                               ),
                             ),

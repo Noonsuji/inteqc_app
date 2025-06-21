@@ -17,10 +17,11 @@ class AppConstant {
       color: const Color.fromARGB(255, 71, 71, 71)
     );
   }
-  static TextStyle bodyStyle() => TextStyle(
+  static TextStyle bodyStyle({double? fontSize, Color? color}) => TextStyle(
     fontSize: 18,
     fontWeight: FontWeight.normal,
     fontFamily: 'Kanit',
+    color: color
   );
 
   static TxtStyle({double? fontSize, Color? color}) {

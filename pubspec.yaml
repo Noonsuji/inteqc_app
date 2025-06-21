@@ -44,6 +44,13 @@ dependencies:
   responsive_builder: ^0.7.1
   material3_layout: ^0.0.7
   carousel_slider: ^5.1.1
+  url_launcher: ^6.3.1
+  qr_flutter: ^4.1.0
+  path_provider: ^2.1.5
+  share_plus: ^11.0.0
+  cross_file: ^0.3.4+2
+  webview_flutter: ^4.13.0
+  webview_flutter_android: ^4.7.0
 
 
 
