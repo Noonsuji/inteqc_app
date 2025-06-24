@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:inteqc_app/utility/app_constant.dart';
+import 'package:inteqc_app/widgets/newsdetailpage.dart';
 
 class BodyNews extends StatefulWidget {
   const BodyNews({super.key});
@@ -111,67 +112,82 @@ class _BodyNewsState extends State<BodyNews>
               ),
               itemBuilder: (context, index) {
                 final imgPath = filtered[index];
-                return Card(color: const Color.fromARGB(255, 255, 255, 255),
-                  elevation: 2,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  child: Column(
-                    children: [
-                      ClipRRect(
-                        borderRadius: const BorderRadius.vertical(
-                          top: Radius.circular(12),
-                        ),
-                        child: Image.asset(
-                          imgPath,
-                          height: 100,
-                          width: double.infinity,
-                          fit: BoxFit.cover,
+                return InkWell(
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => NewsDetailPage(
+                          imagePath: imgPath,
+                          title: 'หัวข้อข่าว',
+                          summary: 'เนื้อหาย่อ...',
                         ),
                       ),
-                      const Padding(
-                        padding: EdgeInsets.all(8),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              'หัวข้อข่าว',
-                              style: TextStyle(
-                                color: Color.fromARGB(255, 0, 0, 0),
-                                fontSize: 16,
-                                fontFamily: 'kanit',
-                                fontWeight: FontWeight.bold,
-                              ),
-                              maxLines: 2,
-                              overflow: TextOverflow.ellipsis,
-                            ),
-                            SizedBox(height: 4),
-                            Text(
-                              'เนื้อหาย่อ...',
-                              style: TextStyle(
-                                color: Color.fromARGB(255, 0, 0, 0),
-                                fontSize: 14,
-                                fontFamily: 'kanit',
-                              ),
-                              maxLines: 2,
-                              overflow: TextOverflow.ellipsis,
-                            ),
-                            SizedBox(height: 6),
-                            Align(
-                              alignment: Alignment.centerRight,
-                              child: Text(
-                                'อ่านเพิ่มเติม',
+                    );
+                  },
+                  child: Card(
+                    color: const Color.fromARGB(255, 255, 255, 255),
+                    elevation: 2,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    child: Column(
+                      children: [
+                        ClipRRect(
+                          borderRadius: const BorderRadius.vertical(
+                            top: Radius.circular(12),
+                          ),
+                          child: Image.asset(
+                            imgPath,
+                            height: 100,
+                            width: double.infinity,
+                            fit: BoxFit.cover,
+                          ),
+                        ),
+                        const Padding(
+                          padding: EdgeInsets.all(8),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                'หัวข้อข่าว',
                                 style: TextStyle(
-                                  color: Color.fromARGB(255, 91, 155, 250),
+                                  color: Color.fromARGB(255, 0, 0, 0),
+                                  fontSize: 16,
+                                  fontFamily: 'kanit',
+                                  fontWeight: FontWeight.bold,
+                                ),
+                                maxLines: 2,
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                              SizedBox(height: 4),
+                              Text(
+                                'เนื้อหาย่อ...',
+                                style: TextStyle(
+                                  color: Color.fromARGB(255, 0, 0, 0),
                                   fontSize: 14,
                                   fontFamily: 'kanit',
                                 ),
+                                maxLines: 2,
+                                overflow: TextOverflow.ellipsis,
                               ),
-                            ),
-                          ],
+                              SizedBox(height: 6),
+                              Align(
+                                alignment: Alignment.centerRight,
+                                child: Text(
+                                  'อ่านเพิ่มเติม',
+                                  style: TextStyle(
+                                    color: Color.fromARGB(255, 91, 155, 250),
+                                    fontSize: 14,
+                                    fontFamily: 'kanit',
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                 );
               },

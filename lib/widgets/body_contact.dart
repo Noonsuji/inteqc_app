@@ -3,6 +3,7 @@ import 'package:getwidget/getwidget.dart';
 import 'package:inteqc_app/models/contract_model.dart';
 import 'package:inteqc_app/utility/app_constant.dart';
 import 'package:inteqc_app/utility/app_service.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class BodyContact extends StatefulWidget {
   const BodyContact({super.key});
@@ -19,6 +20,7 @@ class _BodyContactState extends State<BodyContact> {
   bool hasMore = true;
   final ScrollController _scrollController = ScrollController();
   String searchQuery = '';
+
   @override
   void initState() {
     super.initState();
@@ -47,7 +49,7 @@ class _BodyContactState extends State<BodyContact> {
       final newData = await service.fetchContracts(
         page: currentPage,
         pageSize: pageSize,
-        searchQuery: searchQuery, // สำคัญ!
+        searchQuery: searchQuery,
       );
 
       setState(() {
@@ -74,8 +76,8 @@ class _BodyContactState extends State<BodyContact> {
       final q = searchQuery.toLowerCase().trim();
       return e.fullName.toLowerCase().trim().contains(q) ||
           e.nickname.toLowerCase().trim().contains(q) ||
-          e.department.toLowerCase().trim().contains(q) ||
-          e.empCode.toLowerCase().trim().contains(q);
+          e.OrgName.toLowerCase().trim().contains(q) ||
+          e.Phone2.toLowerCase().trim().contains(q);
     }).toList();
     for (var e in allEmployees) {
       debugPrint('FullName: "${e.fullName}"');
@@ -131,96 +133,142 @@ class _BodyContactState extends State<BodyContact> {
                         onTap: () {
                           showDialog(
                             context: context,
-                            builder: (context) => GFAlert(
-                              title: e.fullName,
-                              titleTextStyle: AppConstant.bodyStyle(),
-                              content: Column(
-                                mainAxisSize: MainAxisSize.min,
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Center(
-                                    child: ClipRRect(
-                                      borderRadius: BorderRadius.circular(60),
-                                      child: Image.asset(
-                                        'images/Userman.png',
-                                        width: 100,
-                                        height: 100,
-                                        fit: BoxFit.cover,
-                                      ),
+                            builder: (context) => Material(
+                              type: MaterialType.transparency,
+                              child: GFAlert(
+                                type: GFAlertType.rounded,
+                                content: SizedBox(
+                                  height:
+                                      MediaQuery.of(context).size.height * 0.3,
+                                  child: SingleChildScrollView(
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Center(
+                                          child: ClipRRect(
+                                            borderRadius: BorderRadius.circular(
+                                              60,
+                                            ),
+                                            child: Image.asset(
+                                              'images/Userman.png',
+                                              width: 100,
+                                              height: 100,
+                                              fit: BoxFit.cover,
+                                            ),
+                                          ),
+                                        ),
+                                        const SizedBox(height: 12),
+                                        Center(
+                                          child: Text(
+                                            ' ${e.fullName} (${e.nickname})',
+                                            style: AppConstant.headStyle(
+                                              fontSize: 24,
+                                            ),
+                                          ),
+                                        ),
+
+                                        Text(
+                                          ' ${e.OrgName}',
+                                          style: AppConstant.bodyStyle(),
+                                        ),
+                                        Text(
+                                          ' ${e.OrgUnitName}',
+                                          style: AppConstant.bodyStyle(),
+                                        ),
+                                        Text(
+                                          ' ${e.Email1}',
+                                          style: AppConstant.bodyStyle(),
+                                        ),
+                                        if (e.Phone2.trim().isNotEmpty)
+                                          InkWell(
+                                            onTap: () =>
+                                                _makePhoneCall(e.Phone2),
+                                            child: Text(
+                                              'โทร: ${e.Phone2}',
+                                              style: AppConstant.bodyStyle()
+                                                  .copyWith(
+                                                    color: Colors.blue,
+                                                    decoration: TextDecoration
+                                                        .underline,
+                                                  ),
+                                            ),
+                                          ),
+                                      ],
                                     ),
                                   ),
-                                  const SizedBox(height: 12),
-                                  Text(
-                                    'ชื่อเล่น: ${e.nickname}',
-                                    style: AppConstant.bodyStyle(),
-                                  ),
-                                  Text(
-                                    'แผนก: ${e.department}',
-                                    style: AppConstant.bodyStyle(),
-                                  ),
-                                  Text(
-                                    'รหัสพนักงาน: ${e.empCode}',
-                                    style: AppConstant.bodyStyle(),
-                                  ),
-                                ],
-                              ),
-                              type: GFAlertType.rounded,
-                              bottomBar: GFButton(
-                                onPressed: () {
-                                  Navigator.of(context).pop(); // ปิด Dialog
-                                },
-                                text: "ปิด",
-                                textStyle: AppConstant.bodyStyle(),
-                                color: GFColors.PRIMARY,
-                                fullWidthButton: true,
-                                shape: GFButtonShape.pills,
+                                ),
+                                bottomBar: GFButton(
+                                  onPressed: () => Navigator.of(context).pop(),
+                                  text: "ปิด",
+                                  textStyle: AppConstant.bodyStyle(),
+                                  color: GFColors.PRIMARY,
+                                  fullWidthButton: true,
+                                  shape: GFButtonShape.pills,
+                                ),
                               ),
                             ),
                           );
                         },
-                        child: Card(
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(12),
-                          ),
-                          elevation: 4,
-                          child: Padding(
-                            padding: const EdgeInsets.all(8),
-                            child: Column(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                ClipRRect(
-                                  borderRadius: BorderRadius.circular(50),
-                                  child: Image.asset(
-                                    'images/Userman.png',
-                                    width: 80,
-                                    height: 80,
-                                    fit: BoxFit.cover,
+                        child: Material(
+                          child: Card(
+                            color: const Color.fromARGB(255, 255, 255, 255),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                            elevation: 4,
+                            child: Padding(
+                              padding: const EdgeInsets.all(8),
+                              child: Column(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  ClipRRect(
+                                    borderRadius: BorderRadius.circular(50),
+                                    child: Image.asset(
+                                      'images/Userman.png',
+                                      width: 80,
+                                      height: 80,
+                                      fit: BoxFit.cover,
+                                    ),
                                   ),
-                                ),
-                                const SizedBox(height: 8),
-                                Text(
-                                  e.fullName,
-                                  style: AppConstant.TxtStyle(fontSize: 16),
-                                  maxLines: 1,
-                                  overflow: TextOverflow.ellipsis,
-                                  textAlign: TextAlign.center,
-                                ),
-                                Text(
-                                  'ชื่อเล่น: ${e.nickname}',
-                                  textAlign: TextAlign.center,
-                                  style: AppConstant.bodyStyle(fontSize: 10),
-                                ),
-                                Text(
-                                  'แผนก: ${e.department}',
-                                  textAlign: TextAlign.center,
-                                  style: AppConstant.bodyStyle(fontSize: 10),
-                                ),
-                                Text(
-                                  'รหัส: ${e.empCode}',
-                                  textAlign: TextAlign.center,
-                                  style: AppConstant.bodyStyle(fontSize: 10),
-                                ),
-                              ],
+                                  const SizedBox(height: 8),
+                                  Text(
+                                    e.fullName,
+                                    style: AppConstant.TxtStyle(fontSize: 16),
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
+                                    textAlign: TextAlign.center,
+                                  ),
+                                  Center(
+                                    child: Text(
+                                      ' (${e.nickname})',
+                                      textAlign: TextAlign.center,
+                                      style: AppConstant.bodyStyle(
+                                        fontSize: 10,
+                                      ),
+                                    ),
+                                  ),
+                                  Text(
+                                    ' ${e.OrgName}',
+                                    textAlign: TextAlign.center,
+                                    style: AppConstant.bodyStyle(fontSize: 10),
+                                  ),
+                                  Spacer(),
+                                 if (e.Phone2.trim().isNotEmpty) Material(
+                                    child: InkWell(
+                                      onTap: () => _makePhoneCall(e.Phone2),
+                                      child: Text(
+                                        'โทร: ${e.Phone2}',
+                                        style: AppConstant.bodyStyle().copyWith(
+                                          color: Colors.blue,
+                                          decoration: TextDecoration.underline,
+                                        ),
+                                        maxLines: 1,
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
                             ),
                           ),
                         ),
@@ -246,5 +294,17 @@ class _BodyContactState extends State<BodyContact> {
         ),
       ),
     );
+  }
+
+  void _makePhoneCall(String phone2) async {
+    final Uri phoneUri = Uri(scheme: 'tel', path: phone2);
+    if (await canLaunchUrl(phoneUri)) {
+      await launchUrl(phoneUri);
+    } else {
+      if (!mounted) return;
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text('ไม่สามารถโทรออกได้')));
+    }
   }
 }

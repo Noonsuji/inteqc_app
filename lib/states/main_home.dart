@@ -32,7 +32,7 @@ class _MainHomeState extends State<MainHome> {
     BodyProfile(),
   ];
   AppController appController = Get.put(AppController());
-  final hideAppBarFor = [1, 2, 3];
+  final hideAppBarFor = [1, 2, 3, 4];
 
   List<BottomNavigationBarItem> items = [];
   @override
@@ -56,66 +56,62 @@ class _MainHomeState extends State<MainHome> {
     return Obx(
       () => SafeArea(
         child: Scaffold(
-          appBar: [1, 2, 3,4].contains(appController.indexBody.value)
+          appBar: hideAppBarFor.contains(appController.indexBody.value)
               ? null
               : PreferredSize(
-                  preferredSize: const Size.fromHeight(75),
-                  child: AppBar(
-                    backgroundColor: Colors.white,
-                    elevation: 12,
-                    title: Row(
-                      mainAxisAlignment:
-                          MainAxisAlignment.center, // จัด Row ให้อยู่กลางแนวนอน
-                      mainAxisSize: MainAxisSize.min, // ขนาดเท่าที่จำเป็น
+                  preferredSize: Size.fromHeight(80),
+                  child: Container(
+                    color: Colors.white,
+                    padding: EdgeInsets.only(
+                      top: 16,
+                      left: 16,
+                      right: 16,
+                      bottom: 12,
+                    ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        GestureDetector(onTap: () {
-                          appController.indexBody.value = 4; // เปลี่ยนไปหน้า Profile
-                        },
-                          child: CircleAvatar(
-                            radius: 25,
-                            backgroundImage: AssetImage(
-                              'images/iconhuman.png', // ใส่ URL หรือ AssetImage
-                            ),
-                          ),
-                        ),
-                        const SizedBox(width: 12),
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
+                        // ด้านซ้าย
+                        Row(
                           children: [
-                            Text(
-                              'INTEQC MEMBER',
-                              style: AppConstant.headStyle(
-                                fontSize: 16,
-                                
+                            CircleAvatar(
+                              backgroundImage: AssetImage(
+                                'images/iconhuman.png',
                               ),
+                              radius: 20,
                             ),
-                            Text(
-                              'Suchada Aumkong',
-                              style: AppConstant.LoginStyle(
-                                fontSize: 14,
-                                
-                              ),
+                            SizedBox(width: 12),
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: const [
+                                Text(
+                                  'INTEQC MEMBER',
+                                  style: TextStyle(
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                                Text(
+                                  'Suchada Aumkong',
+                                  style: TextStyle(
+                                    fontSize: 12,
+                                    color: Colors.grey,
+                                  ),
+                                ),
+                              ],
                             ),
                           ],
                         ),
-                      ],
-                    ),
-                    actions: [
-                      Padding(
-                        padding: const EdgeInsets.only(right: 16),
-                        child: Stack(
-                          alignment: Alignment.topRight,
+
+                        // ด้านขวา
+                        Stack(
                           children: [
-                            const Icon(
-                              Icons.notifications_none,
-                              color: Colors.black,
-                              size: 32, // เพิ่มขนาดไอคอนแจ้งเตือน
-                            ),
+                            Icon(Icons.notifications_none, size: 28),
                             Positioned(
                               right: 0,
                               top: 0,
                               child: Container(
-                                padding: const EdgeInsets.all(3),
+                                padding: EdgeInsets.all(3),
                                 decoration: BoxDecoration(
                                   color: Colors.red,
                                   shape: BoxShape.circle,
@@ -125,34 +121,61 @@ class _MainHomeState extends State<MainHome> {
                                   style: TextStyle(
                                     fontSize: 10,
                                     color: Colors.white,
-                                    fontWeight: FontWeight.bold,
                                   ),
                                 ),
                               ),
                             ),
                           ],
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                 ),
-
           body: bodys[appController.indexBody.value],
-          bottomNavigationBar: BottomNavigationBar(
-            items: items,
-            currentIndex: appController.indexBody.value,
-            selectedItemColor: AppConstant.appColor,
-            selectedIconTheme: IconThemeData(size: 50),
-            unselectedIconTheme: IconThemeData(size: 27),
-            selectedLabelStyle: TextStyle(
-              fontSize: 14,
-              fontWeight: FontWeight.bold,
+          bottomNavigationBar: Container(
+            decoration: BoxDecoration(
+              color: Colors.white,
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black12,
+                  blurRadius: 6,
+                  offset: Offset(0, -2),
+                ),
+              ],
+              borderRadius: const BorderRadius.only(
+                topLeft: Radius.circular(20),
+                topRight: Radius.circular(20),
+              ),
             ),
-            unselectedLabelStyle: TextStyle(fontSize: 12),
-            unselectedItemColor: Colors.grey,
-            onTap: (value) {
-              appController.indexBody.value = value;
-            },
+            child: SafeArea(
+              child: BottomNavigationBar(
+                type: BottomNavigationBarType.fixed,
+                backgroundColor: Colors.transparent,
+                elevation: 0,
+                items: List.generate(titles.length, (i) {
+                  return BottomNavigationBarItem(
+                    icon: Icon(
+                      iconDatas[i],
+                      size: i == 2 ? 34 : 26, // Menu ใหญ่ขึ้นเล็กน้อยพอเหมาะ
+                    ),
+                    label: titles[i],
+                  );
+                }),
+                currentIndex: appController.indexBody.value,
+                selectedItemColor: AppConstant.appColor,
+                unselectedItemColor: Colors.grey,
+                selectedIconTheme: const IconThemeData(size: 30),
+                unselectedIconTheme: const IconThemeData(size: 24),
+                selectedLabelStyle: const TextStyle(
+                  fontSize: 13,
+                  fontWeight: FontWeight.w600,
+                ),
+                unselectedLabelStyle: const TextStyle(fontSize: 11),
+                onTap: (value) {
+                  appController.indexBody.value = value;
+                },
+              ),
+            ),
           ),
         ),
       ),

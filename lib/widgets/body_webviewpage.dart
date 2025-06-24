@@ -1,6 +1,6 @@
-import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:inteqc_app/utility/app_constant.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 class BodyWebviewpage extends StatefulWidget {
@@ -36,7 +36,7 @@ class _BodyWebviewpageState extends State<BodyWebviewpage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text("ระบบลาออนไลน์")),
+      appBar: AppBar(title: Text("ระบบลาออนไลน์"),titleTextStyle: AppConstant.headStyle(),),
       body: Stack(
         children: [
           WebViewWidget(controller: _controller),

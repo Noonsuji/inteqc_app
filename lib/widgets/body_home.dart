@@ -6,6 +6,7 @@ import 'package:inteqc_app/utility/app_constant.dart';
 import 'package:inteqc_app/utility/app_controller.dart';
 import 'package:inteqc_app/widgets/body_vcard.dart';
 import 'package:inteqc_app/widgets/body_webviewpage.dart';
+import 'package:inteqc_app/widgets/newsdetailpage.dart';
 
 import 'package:url_launcher/url_launcher.dart';
 
@@ -172,7 +173,16 @@ class _BodyHomeState extends State<BodyHome> {
               itemBuilder: (context, index) {
                 return GestureDetector(
                   onTap: () {
-                    print('ไปที่ข่าว: ${newsImages[index]}');
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => NewsDetailPage(
+                          imagePath: newsImages[index],
+                          title: 'หัวข้อข่าว',
+                          summary: 'เนื้อหาย่อ...',
+                        ),
+                      ),
+                    );
                   },
                   child: Container(
                     width: 150.0,
@@ -209,11 +219,11 @@ class _BodyHomeState extends State<BodyHome> {
               context,
               MaterialPageRoute(
                 builder: (context) =>
-                    BodyWebviewpage(url: 'https://flutter.dev/'),
+                    BodyWebviewpage(url: 'http://inteqcglobal.inteqc.com/ProsoftESS/Member/Signin'),
               ),
             );
             break;
-            case 'Vcard':
+          case 'Vcard':
             Navigator.push(
               context,
               MaterialPageRoute(builder: (_) => const BodyVcard()),
