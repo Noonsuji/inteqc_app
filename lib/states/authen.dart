@@ -1,5 +1,7 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+
 import 'package:inteqc_app/states/main_home.dart';
 import 'package:inteqc_app/utility/app_constant.dart';
 import 'package:inteqc_app/utility/app_controller.dart';
@@ -7,12 +9,12 @@ import 'package:inteqc_app/widgets/widget_button.dart';
 import 'package:inteqc_app/widgets/widget_form.dart';
 import 'package:inteqc_app/widgets/widget_icon_button.dart';
 import 'package:inteqc_app/widgets/widget_image.dart';
-import 'package:inteqc_app/widgets/widget_textbutton.dart'
-    show WidgetTextButton;
+import 'package:inteqc_app/widgets/widget_textbutton.dart'show WidgetTextButton;
 import 'package:loader_overlay/loader_overlay.dart';
 
 class Authen extends StatefulWidget {
-  const Authen({super.key});
+  final String platform;
+  const Authen({super.key, required this.platform});
 
   @override
   State<Authen> createState() => _AuthenState();
@@ -137,7 +139,6 @@ class _AuthenState extends State<Authen> {
                                           onPressed: () {
                                             if (keyForm.currentState!
                                                 .validate()) {
-
                                               //เข้าหน้า mainhome
                                               Navigator.pushReplacement(
                                                 context,
@@ -146,8 +147,6 @@ class _AuthenState extends State<Authen> {
                                                       const MainHome(),
                                                 ),
                                               );
-
-                                              
                                             }
                                           },
                                           fullWidthButton: true,

@@ -1,3 +1,5 @@
+import 'dart:io' show Platform;
+import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:inteqc_app/states/authen.dart';
@@ -10,11 +12,22 @@ void main() {
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
+    String platform;
+
+    if (kIsWeb) {
+      platform = 'Web';
+    } else if (Platform.isAndroid) {
+      platform = 'Android';
+    } else if (Platform.isIOS) {
+      platform = 'iOS';
+    } else {
+      platform = 'Other';
+    }
+
     return GetMaterialApp(
-      home: Authen(),
+      home: Authen(platform: platform), 
       theme: ThemeData(
         useMaterial3: true,
         colorScheme: ColorScheme.fromSeed(seedColor: AppConstant.appColor),

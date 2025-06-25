@@ -49,5 +49,20 @@
 		<true/>
 		<key>UIViewControllerBasedStatusBarAppearance</key>
 		<false/>
+		<key>NSCameraUsageDescription</key>
+		<string>แอปต้องการเข้าถึงกล้องเพื่อถ่ายภาพ</string>
+		<key>NSPhotoLibraryUsageDescription</key>
+		<string>แอปต้องการเข้าถึงคลังภาพเพื่อเลือกรูป</string>
+		<key>NSLocationWhenInUseUsageDescription</key>
+		<string>แอปต้องการใช้ตำแหน่งของคุณเพื่อแสดงข้อมูลใกล้เคียง</string>
+		<key>LSApplicationQueriesSchemes</key>
+		<array>
+		    <string>tel</string>
+		    <string>mailto</string>
+		    <string>http</string>
+		    <string>https</string>
+		</array>
+		<key>NSDocumentsFolderUsageDescription</key>
+		<string>แอปต้องการบันทึกไฟล์ลงในเครื่อง</string>
 	</dict>
 </plist>
