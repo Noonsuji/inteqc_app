@@ -31,7 +31,7 @@ class _MainHomeState extends State<MainHome> {
     BodyContact(),
     BodyProfile(),
   ];
-  AppController appController = Get.put(AppController());
+  AppController appController = Get.find();
   final hideAppBarFor = [1, 2, 3, 4];
 
   List<BottomNavigationBarItem> items = [];
@@ -43,7 +43,7 @@ class _MainHomeState extends State<MainHome> {
         BottomNavigationBarItem(
           icon: Icon(
             iconDatas[i],
-            size: i == 2 ? 50 : 27, // ปุ่ม Menu ใหญ่ขึ้น
+            size: i == 2 ? 50 : 27,//ขนาดปุ่ม
           ),
           label: titles[i],
         ),
@@ -71,7 +71,7 @@ class _MainHomeState extends State<MainHome> {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        // ด้านซ้าย
+                        //ซ้าย
                         Row(
                           children: [
                             CircleAvatar(
@@ -103,7 +103,7 @@ class _MainHomeState extends State<MainHome> {
                           ],
                         ),
 
-                        // ด้านขวา
+                        //ขวา
                         Stack(
                           children: [
                             Icon(Icons.notifications_none, size: 28),
@@ -156,7 +156,7 @@ class _MainHomeState extends State<MainHome> {
                   return BottomNavigationBarItem(
                     icon: Icon(
                       iconDatas[i],
-                      size: i == 2 ? 34 : 26, // Menu ใหญ่ขึ้นเล็กน้อยพอเหมาะ
+                      size: i == 2 ? 34 : 26, 
                     ),
                     label: titles[i],
                   );

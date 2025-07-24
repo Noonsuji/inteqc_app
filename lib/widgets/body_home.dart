@@ -18,17 +18,15 @@ class BodyHome extends StatefulWidget {
 }
 
 class _BodyHomeState extends State<BodyHome> {
-  AppController appController = Get.put(AppController());
+  AppController appController = Get.find();
 
   Future<void> _launchEmailApp() async {
-    const String outlookAndroidScheme = 'ms-outlook://'; // บางเครื่องรองรับ
+    const String outlookAndroidScheme = 'ms-outlook://'; 
     const String outlookAndroidPackage = 'com.microsoft.office.outlook';
 
-    // ใช้ launchUrl ถ้า scheme ทำงาน
     if (await canLaunchUrl(Uri.parse(outlookAndroidScheme))) {
       await launchUrl(Uri.parse(outlookAndroidScheme));
     } else {
-      // fallback เปิดแอปด้วย package (Android เท่านั้น)
       final Uri uri = Uri(
         scheme: 'intent',
         path: '/',
@@ -94,13 +92,10 @@ class _BodyHomeState extends State<BodyHome> {
       'images/NW5.jpg',
     ];
 
-    //const newsHeight = 100.0;
 
     return SingleChildScrollView(
       child: Column(
         children: [
-          //const SizedBox(height: 1),
-          // ---------- Image Slider ----------
           CarouselSlider(
             options: CarouselOptions(
               height: 250,
@@ -129,11 +124,10 @@ class _BodyHomeState extends State<BodyHome> {
           const SizedBox(height: 16),
           const SizedBox(height: 16),
 
-          // ---------- ตัวอย่างเนื้อหาอื่น ๆ ----------
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16.0),
             child: SizedBox(
-              height: 260, // กำหนดความสูงของ PageView
+              height: 260, // ความสูงของหน้าดูรายละเอียด
               child: PageView(children: buildMenuPages()),
             ),
           ),
@@ -206,10 +200,10 @@ class _BodyHomeState extends State<BodyHome> {
       onTap: () {
         switch (label) {
           case 'แจ้งซ่อม':
-            // Navigator.push(context, MaterialPageRoute(builder: (_) => BodyRepair()));
+            // ใส่ลิ้งค์
             break;
           case 'จองห้องประชุม':
-            // Navigator.push(context, MaterialPageRoute(builder: (_) => BodyMeeting()));
+            // ใส่ลิ้งค์
             break;
           case 'Email':
             _launchEmailApp();

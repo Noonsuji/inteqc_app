@@ -52,7 +52,7 @@ class _AllAppsPageState extends State<AllAppsPage> {
       );
     }
 
-return GestureDetector(onTap: () => FocusScope.of(context).unfocus(),  // แตะพื้นที่ว่างจะปิด keyboard
+return GestureDetector(onTap: () => FocusScope.of(context).unfocus(),  //แตะตรงอื่นแล้วพับคีย์บอร์ด
     child:  Scaffold(
       appBar: AppBar(title: Text('แอปทั้งหมดของ ${widget.department}'),titleTextStyle: AppConstant.headStyle(),),
       body: Padding(

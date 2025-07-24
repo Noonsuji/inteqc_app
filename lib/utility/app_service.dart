@@ -3,7 +3,7 @@ import 'package:dio/dio.dart';
 import 'package:inteqc_app/models/contract_model.dart';
 
 class AppService {
-  final String baseUrl = 'http://192.168.130.51:3000';
+  final String baseUrl = 'http://ictsupport.inteqcgroup.com:3000';
 
   Future<List<ContractModel>> fetchContracts({
     int page = 1,

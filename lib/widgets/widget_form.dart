@@ -34,7 +34,7 @@ class WidgetForm extends StatelessWidget {
               43,
               119,
               251,
-            ), // ขอบตอนกำลังพิมพ์ (focus)
+            ), 
             width: 2,
           ),
         ),

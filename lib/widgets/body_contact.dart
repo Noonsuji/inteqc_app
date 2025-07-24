@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:getwidget/getwidget.dart';
 import 'package:inteqc_app/models/contract_model.dart';
@@ -20,6 +22,8 @@ class _BodyContactState extends State<BodyContact> {
   bool hasMore = true;
   final ScrollController _scrollController = ScrollController();
   String searchQuery = '';
+  Timer? _debounce;
+  Duration debounceDuration = const Duration(milliseconds: 400);
 
   @override
   void initState() {
@@ -52,6 +56,7 @@ class _BodyContactState extends State<BodyContact> {
         searchQuery: searchQuery,
       );
 
+      if (!mounted) return;
       setState(() {
         currentPage++;
         allEmployees.addAll(newData);
@@ -66,10 +71,10 @@ class _BodyContactState extends State<BodyContact> {
 
   @override
   void dispose() {
-    _scrollController.dispose();
-    super.dispose();
-  }
-
+  _debounce?.cancel();
+  _scrollController.dispose();
+  super.dispose();
+}
   @override
   Widget build(BuildContext context) {
     final filteredEmployees = allEmployees.where((e) {
@@ -96,20 +101,23 @@ class _BodyContactState extends State<BodyContact> {
               child: TextField(
                 decoration: InputDecoration(
                   labelText: 'ค้นหา',
-                  labelStyle: AppConstant.bodyStyle(),
                   prefixIcon: const Icon(Icons.search),
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(12),
                   ),
                 ),
                 onChanged: (value) {
-                  setState(() {
-                    searchQuery = value;
-                    allEmployees.clear();
-                    currentPage = 1;
-                    hasMore = true;
+                  if (_debounce?.isActive ?? false) _debounce!.cancel();
+
+                  _debounce = Timer(const Duration(milliseconds: 400), () {
+                    setState(() {
+                      searchQuery = value;
+                      allEmployees.clear();
+                      currentPage = 1;
+                      hasMore = true;
+                    });
+                    loadData();
                   });
-                  loadData();
                 },
               ),
             ),
@@ -254,19 +262,22 @@ class _BodyContactState extends State<BodyContact> {
                                     style: AppConstant.bodyStyle(fontSize: 10),
                                   ),
                                   Spacer(),
-                                 if (e.Phone2.trim().isNotEmpty) Material(
-                                    child: InkWell(
-                                      onTap: () => _makePhoneCall(e.Phone2),
-                                      child: Text(
-                                        'โทร: ${e.Phone2}',
-                                        style: AppConstant.bodyStyle().copyWith(
-                                          color: Colors.blue,
-                                          decoration: TextDecoration.underline,
+                                  if (e.Phone2.trim().isNotEmpty)
+                                    Material(
+                                      child: InkWell(
+                                        onTap: () => _makePhoneCall(e.Phone2),
+                                        child: Text(
+                                          'โทร: ${e.Phone2}',
+                                          style: AppConstant.bodyStyle()
+                                              .copyWith(
+                                                color: Colors.blue,
+                                                decoration:
+                                                    TextDecoration.underline,
+                                              ),
+                                          maxLines: 1,
                                         ),
-                                        maxLines: 1,
                                       ),
                                     ),
-                                  ),
                                 ],
                               ),
                             ),

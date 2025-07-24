@@ -1,4 +1,4 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first
+// ignore_for_file: public_member_api_docs, sort_constructors_first, use_build_context_synchronously
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -9,7 +9,8 @@ import 'package:inteqc_app/widgets/widget_button.dart';
 import 'package:inteqc_app/widgets/widget_form.dart';
 import 'package:inteqc_app/widgets/widget_icon_button.dart';
 import 'package:inteqc_app/widgets/widget_image.dart';
-import 'package:inteqc_app/widgets/widget_textbutton.dart'show WidgetTextButton;
+import 'package:inteqc_app/widgets/widget_textbutton.dart'
+    show WidgetTextButton;
 import 'package:loader_overlay/loader_overlay.dart';
 
 class Authen extends StatefulWidget {
@@ -21,7 +22,7 @@ class Authen extends StatefulWidget {
 }
 
 class _AuthenState extends State<Authen> {
-  AppController appController = Get.put(AppController());
+  AppController appController = Get.find();
 
   final keyForm = GlobalKey<FormState>();
   TextEditingController userNameController = TextEditingController();
@@ -35,11 +36,11 @@ class _AuthenState extends State<Authen> {
           child: GestureDetector(
             onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
             child: SingleChildScrollView(
-              padding: EdgeInsets.all(24), // ขอบรอบๆ
+              padding: EdgeInsets.all(24), 
               child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center, // จัดกลางแนวนอน
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  SizedBox(height: 80), // ระยะห่างจากขอบบน
+                  SizedBox(height: 80), 
                   LayoutBuilder(
                     builder: (context, constraints) {
                       return Center(
@@ -136,19 +137,50 @@ class _AuthenState extends State<Authen> {
                                             Icons.login,
                                             color: Colors.white,
                                           ),
-                                          onPressed: () {
+                                          onPressed: () async {
                                             if (keyForm.currentState!
                                                 .validate()) {
-                                              //เข้าหน้า mainhome
-                                              Navigator.pushReplacement(
-                                                context,
-                                                MaterialPageRoute(
-                                                  builder: (context) =>
-                                                      const MainHome(),
-                                                ),
-                                              );
+                                              final ctx = context;
+
+                                              try {
+                                                ctx.loaderOverlay.show();
+                                                FocusScope.of(
+                                                  context,
+                                                ).unfocus();
+
+                                                await Future.delayed(
+                                                  Duration(seconds: 1),
+                                                );
+
+                                                if (!mounted) return;
+
+                                                Navigator.pushReplacement(
+                                                  ctx,
+                                                  MaterialPageRoute(
+                                                    builder: (_) =>
+                                                        const MainHome(),
+                                                  ),
+                                                );
+                                              } catch (e) {
+                                                if (!mounted) return;
+                                                debugPrint('Login error: $e');
+                                                ScaffoldMessenger.of(
+                                                  ctx,
+                                                ).showSnackBar(
+                                                  SnackBar(
+                                                    content: Text(
+                                                      'Login failed: $e',
+                                                    ),
+                                                  ),
+                                                );
+                                              } finally {
+                                                if (mounted) {
+                                                  ctx.loaderOverlay.hide();
+                                                }
+                                              }
                                             }
                                           },
+
                                           fullWidthButton: true,
                                         ),
                                       );
